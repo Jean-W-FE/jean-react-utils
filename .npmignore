@@ -1,0 +1,54 @@
+# 若package.json 中配置了files，则npmignore 中的内容不会被发布。为了保险期间，这个文件暂时保留
+# 不发布源码
+src/
+test/
+__tests__/
+*.test.*
+*.spec.*
+docs/
+
+# 本地开发
+.vscode/
+node_modules/
+coverage/
+*.log
+*.DS_Store
+.turbo
+.cache
+.eslintcache
+.stylelintcache
+
+# 不发布配置
+tsconfig.json
+vitest.config.ts
+tailwind.config.ts
+tsup.config.ts
+postcss.config.js
+.eslintrc.*
+.prettierrc
+.prettierrc.*
+.eslintignore
+.gitignore
+.npmignore
+
+# 文檔和其他
+*.md
+CHANGELOG.md
+README.md
+LICENSE
+
+# Git 相關
+.git/
+.github/
+.gitattributes
+
+# 環境變量
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 其他
+.DS_Store
+*.tsbuildinfo
