@@ -18,23 +18,26 @@
   ],
   "scripts": {
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
-    "build": "tsup src/index.ts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
     "test": "vitest",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "classnames": "^2.5.1"
+    "lucide-react": "^0.523.0"
   },
   "devDependencies": {
+    "@studio-freight/react-lenis": "^0.0.47",
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.5.2",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.6.1",
     "happy-dom": "^13.3.8",
+    "next-themes": "^0.4.6",
     "tsup": "^8.0.2",
     "vitest": "^1.6.1"
   },
@@ -56,7 +59,8 @@
     "jean-blog-site"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "license": "MIT"
 }

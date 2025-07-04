@@ -1,6 +1,8 @@
 export * from './components'
 export * from './layout'
 export { default as useForceRerender } from './hooks/useForceRerender'
+export * from './providers'
+export * from './theme'
 // export * from './hooks'
 // export * from './layout'
 // export * from './theme'

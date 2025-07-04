@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import classNames from 'classnames';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import BreadIcon from './BreadIcon';
 import { usePathname } from 'next/navigation';
+import { ThemeToggle } from '@/theme/providers/theme-toggle';
 export interface NavItem {
   key: string;
   href: string;
@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const selectedKey = usePathname().split('/')[2] || 'home';
   // 如何解决className 重复的问题，传入值与默认值有重复
-  const baseNavClassName = classNames(`fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100 text-gray-600`, className);
+  const baseNavClassName = `fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100 text-gray-600 ${className}`;
 
   // 動畫配置
   const navVariants = {
@@ -81,6 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
 const DesktopNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: NavItem[], selectedKey: string, enableAnimation: boolean }) => {
   return (
     <nav className='hidden md:flex items-center space-x-8'>
+      <ThemeToggle/>
       {menuItems.map((item) => (
         <NavLink key={item.key} href={item.href} selectedKey={selectedKey} className={item.className?.pc}>{item.label}</NavLink>
       ))}
@@ -119,6 +120,7 @@ const MobileNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: Nav
       })
     }>
       <nav className='flex flex-col space-y-4 py-4 items-center'>
+        <ThemeToggle/>
         {menuItems.map((item) => (
           <MobileMenuComponent key={item.key} {...(enableAnimation && {
               initial: { x: -20, opacity: 0 },
@@ -145,10 +147,7 @@ const MobileMenuBtn = ({ setIsMenuOpen, isMenuOpen }: { menuItems: NavItem[], se
 }
 
 const NavLink = ({ href, children, className, selectedKey }: { href: string; children: React.ReactNode, className?: string, selectedKey: string }) => {
-  const combinedClassName = classNames(
-    className || 'hover:text-black transition-colors',
-    getActivedCls(href, selectedKey)
-  );
+    const combinedClassName = `${className} || hover:text-black transition-colors ${getActivedCls(href, selectedKey)}`;
   return (
     <Link href={href} legacyBehavior>
       <a className={combinedClassName}>{children}</a>
