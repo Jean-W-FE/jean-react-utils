@@ -1,6 +1,6 @@
 {
   "name": "jean-react-utils",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Jean's personal reusable components, hooks, theme and i18n utils for Next.js projects",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
