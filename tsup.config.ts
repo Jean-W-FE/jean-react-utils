@@ -15,4 +15,9 @@ export default defineConfig({
         'framer-motion',
         '@emotion/is-prop-valid'
     ],
+    esbuildOptions(options) {
+        options.alias = {
+            '@': './src',
+        }
+    }
 })

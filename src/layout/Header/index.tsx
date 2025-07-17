@@ -4,42 +4,65 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import BreadIcon from './BreadIcon';
 import { usePathname } from 'next/navigation';
-import { ThemeToggle } from '@/theme/providers/theme-toggle';
+import { ThemeToggle } from '../../theme/providers/theme-toggle';
+
+/**
+ * 导航项接口
+ * @interface NavItem
+ */
 export interface NavItem {
+  /** 导航项唯一标识 */
   key: string;
+  /** 导航链接地址 */
   href: string;
   label: string;
+  /** 自定义样式类名 */
   className?: {
+    /** PC端样式 */
     pc?: string;
+    /** 移动端样式 */
     mobile?: string;
   };
 }
 
-export interface HeaderProps {
-  logo: React.ReactNode;
-  menuItems: NavItem[];
-  className?: string;
-  /** 是否啟用動畫效果 */
-  enableAnimation?: boolean;
+export interface HeaderTheme {
+  activeClassName?: string;
+  mobileMenu?: {
+    button?: string;
+    nav?: string;
+  };
 }
-const getActivedCls = (href: string, selectedKey: string) => {
+
+export interface HeaderProps {
+  /** Logo 组件 */
+  logo: React.ReactNode;
+  /** 导航菜单项 */
+  menuItems: NavItem[];
+  /** 自定义样式类名 */
+  className?: string;
+  /** 是否启用动画效果 */
+  enableAnimation?: boolean;
+  theme?: HeaderTheme;
+}
+
+const getActivedCls = (href: string, selectedKey: string, activeClassName: string = 'text-primary') => {
   if(href.includes(selectedKey) || (href === '/' && selectedKey === 'home')) {
-    return 'text-purple-600';
+    return activeClassName;
   }
   return '';
 }
+
 export const Header: React.FC<HeaderProps> = ({
   logo,
   menuItems,
   className = '',
   enableAnimation = true,
+  theme = {}
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const selectedKey = usePathname().split('/')[2] || 'home';
-  // 如何解决className 重复的问题，传入值与默认值有重复
-  const baseNavClassName = `fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100 text-gray-600 ${className}`;
+  const baseNavClassName = `fixed top-0 left-0 right-0 z-50 backdrop-blur-lg ${className}`;
 
-  // 動畫配置
   const navVariants = {
     hidden: { y: -20, opacity: 0 },
     visible: { 
@@ -52,7 +75,6 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  // 根據是否啟用動畫返回不同的組件
   const HeaderWrapper = enableAnimation ? motion.header : 'header';
   return (
     <HeaderWrapper 
@@ -65,31 +87,78 @@ export const Header: React.FC<HeaderProps> = ({
     >
       <div className='container flex items-center justify-between p-4'>
         {logo}
-        {/* Desktop Navigation */}
-        <DesktopNav menuItems={menuItems} selectedKey={selectedKey} enableAnimation={enableAnimation} />
-        <MobileMenuBtn menuItems={menuItems} selectedKey={selectedKey} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
+
+        <DesktopNav 
+          menuItems={menuItems} 
+          selectedKey={selectedKey} 
+          enableAnimation={enableAnimation}
+          activeClassName={theme.activeClassName}
+        />
+        <MobileMenuBtn 
+          menuItems={menuItems} 
+          selectedKey={selectedKey} 
+          setIsMenuOpen={setIsMenuOpen} 
+          isMenuOpen={isMenuOpen}
+          className={theme.mobileMenu?.button}
+        />
       </div>
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <MobileNav menuItems={menuItems} selectedKey={selectedKey} enableAnimation={enableAnimation} />
+          <MobileNav 
+            menuItems={menuItems} 
+            selectedKey={selectedKey} 
+            enableAnimation={enableAnimation}
+            className={theme.mobileMenu?.nav}
+            activeClassName={theme.activeClassName}
+          />
         )}
       </AnimatePresence>
     </HeaderWrapper>
   );
 }; 
-const DesktopNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: NavItem[], selectedKey: string, enableAnimation: boolean }) => {
+
+const DesktopNav = ({ 
+  menuItems, 
+  selectedKey, 
+  enableAnimation,
+  activeClassName 
+}: { 
+  menuItems: NavItem[], 
+  selectedKey: string, 
+  enableAnimation: boolean,
+  activeClassName?: string 
+}) => {
   return (
     <nav className='hidden md:flex items-center space-x-8'>
       <ThemeToggle/>
       {menuItems.map((item) => (
-        <NavLink key={item.key} href={item.href} selectedKey={selectedKey} className={item.className?.pc}>{item.label}</NavLink>
+        <NavLink 
+          key={item.key} 
+          href={item.href} 
+          selectedKey={selectedKey} 
+          className={item.className?.pc}
+          activeClassName={activeClassName}
+        >
+          {item.label}
+        </NavLink>
       ))}
     </nav>
   )
 }
 
-const MobileNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: NavItem[], selectedKey: string, enableAnimation: boolean }) => {
+const MobileNav = ({ 
+  menuItems, 
+  selectedKey, 
+  enableAnimation,
+  className,
+  activeClassName 
+}: { 
+  menuItems: NavItem[], 
+  selectedKey: string, 
+  enableAnimation: boolean,
+  className?: string,
+  activeClassName?: string 
+}) => {
   const MobileMenuComponent = enableAnimation ? motion.div : 'div';
   const mobileMenuVariants = {
     hidden: { 
@@ -110,15 +179,15 @@ const MobileNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: Nav
     }
   };
   return (
-    <MobileMenuComponent className='md:hidden overflow-hidden'
-    {
-      ...(enableAnimation && {
+    <MobileMenuComponent 
+      className={`md:hidden overflow-hidden ${className || ''}`}
+      {...(enableAnimation && {
         initial: "hidden",
         animate: "visible",
         exit: "hidden",
         variants: mobileMenuVariants
-      })
-    }>
+      })}
+    >
       <nav className='flex flex-col space-y-4 py-4 items-center'>
         <ThemeToggle/>
         {menuItems.map((item) => (
@@ -127,7 +196,14 @@ const MobileNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: Nav
               animate: { x: 0, opacity: 1 },
               transition: { delay: 0.1 }
             })}>
-            <MobileNavLink href={item.href} selectedKey={selectedKey} className={item.className?.mobile}>{item.label}</MobileNavLink>
+            <MobileNavLink 
+              href={item.href} 
+              selectedKey={selectedKey} 
+              className={item.className?.mobile}
+              activeClassName={activeClassName}
+            >
+              {item.label}
+            </MobileNavLink>
           </MobileMenuComponent>
         ))}
       </nav>
@@ -135,19 +211,41 @@ const MobileNav = ({ menuItems, selectedKey, enableAnimation }: { menuItems: Nav
   )
 }
 
-const MobileMenuBtn = ({ setIsMenuOpen, isMenuOpen }: { menuItems: NavItem[], selectedKey: string, setIsMenuOpen: (isMenuOpen: boolean) => void, isMenuOpen: boolean }) => {
+const MobileMenuBtn = ({ 
+  setIsMenuOpen, 
+  isMenuOpen,
+  className = 'p-2 hover:bg-accent rounded-lg transition-colors'
+}: { 
+  menuItems: NavItem[], 
+  selectedKey: string, 
+  setIsMenuOpen: (isMenuOpen: boolean) => void, 
+  isMenuOpen: boolean,
+  className?: string
+}) => {
   return (
-      <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden p-2 hover:bg-purple-50 rounded-lg transition-colors"
-        >
-        <BreadIcon isMenuOpen={isMenuOpen}/>
+    <button 
+      onClick={() => setIsMenuOpen(!isMenuOpen)}
+      className={`md:hidden ${className}`}
+    >
+      <BreadIcon isMenuOpen={isMenuOpen}/>
     </button>
   )
 }
 
-const NavLink = ({ href, children, className, selectedKey }: { href: string; children: React.ReactNode, className?: string, selectedKey: string }) => {
-    const combinedClassName = `${className} || hover:text-black transition-colors ${getActivedCls(href, selectedKey)}`;
+const NavLink = ({ 
+  href, 
+  children, 
+  className, 
+  selectedKey,
+  activeClassName 
+}: { 
+  href: string; 
+  children: React.ReactNode, 
+  className?: string, 
+  selectedKey: string,
+  activeClassName?: string
+}) => {
+  const combinedClassName = `${className || 'hover:text-foreground transition-colors'} ${getActivedCls(href, selectedKey, activeClassName)}`;
   return (
     <Link href={href} legacyBehavior>
       <a className={combinedClassName}>{children}</a>
@@ -155,8 +253,20 @@ const NavLink = ({ href, children, className, selectedKey }: { href: string; chi
   );
 };
 
-const MobileNavLink = ({ href, children, className, selectedKey }: { href: string; children: React.ReactNode, className?: string, selectedKey: string }) => {
-  const combinedClassName = `${className || 'text-lg font-medium text-center hover:text-purple-600 transition-colors'} ${getActivedCls(href, selectedKey)}`;
+const MobileNavLink = ({ 
+  href, 
+  children, 
+  className, 
+  selectedKey,
+  activeClassName 
+}: { 
+  href: string; 
+  children: React.ReactNode, 
+  className?: string, 
+  selectedKey: string,
+  activeClassName?: string
+}) => {
+  const combinedClassName = `${className || 'text-lg font-medium text-center hover:text-primary transition-colors'} ${getActivedCls(href, selectedKey, activeClassName)}`;
   return (
     <Link href={href} legacyBehavior>
       <a className={combinedClassName}>{children}</a>

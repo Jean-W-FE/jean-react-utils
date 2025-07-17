@@ -53,14 +53,14 @@ export const Footer: React.FC<FooterProps> = ({
             <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
               {site.name}
             </h3>
-            <p className="text-gray-600 max-w-xs">
+            <p className="text-gray-600 max-w-xs hover-text-foreground">
               {site.description}
             </p>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-gray-900 uppercase">
+          <div className="space-y-4 ">
+            <h4 className="text-sm font-semibold uppercase text-foreground">
               {navigation.quickLinks.title}
             </h4>
             <nav className="flex flex-col space-y-2">
@@ -78,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Social Links */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-gray-900 uppercase">
+            <h4 className="text-sm font-semibold uppercase text-foreground">
               {texts.social}
             </h4>
             <div className="flex space-x-4">
@@ -97,17 +97,17 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200 pt-6">
+        {/* Bottom Bar: copyright, privacy and terms */}
+        <div className="border-t pt-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-gray-600">
               {texts.copyright}
             </p>
             <div className="flex space-x-6">
-              <Link href="/privacy" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
+              <Link href="/privacy" className="text-sm px-8 text-gray-600 hover:text-purple-600 transition-colors">
                 {texts.privacy}
               </Link>
-              <Link href="/terms" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
+              <Link href="/terms" className="text-sm px-8 text-gray-600 hover:text-purple-600 transition-colors">
                 {texts.terms}
               </Link>
             </div>
@@ -116,7 +116,8 @@ export const Footer: React.FC<FooterProps> = ({
       </div>
 
       {/* Decorative gradient line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600" />
+      {/* <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600" /> */}
+     
     </footer>
   );
 }; 

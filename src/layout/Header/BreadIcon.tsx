@@ -1,5 +1,6 @@
-const spanDefaultCls= 'w-full h-0.5 bg-black transition-transform duration-300'
-const spanOpacityCls= 'w-full h-0.5 bg-black transition-opacity duration-300'
+const commonCls= 'w-full h-0.5 bg-primary duration-300'
+const spanDefaultCls= `${commonCls} transition-transform`
+const spanOpacityCls= `${commonCls} transition-opacity`
 
 export default function BreadIcon({isMenuOpen}: {isMenuOpen: boolean}) {
     return (

@@ -3,13 +3,30 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
+/**
+ * Heading 组件的通用属性类型
+ */
 export interface HeadingProps {
+  /** 子元素内容 */
   children?: ReactNode;
+  /** 自定义类名 */
   className?: string;
+  /** 标题文本，可以替代 children */
   title?: string;
 }
 
-// 頁面主標題：大標題，帶漸變色
+/**
+ * 页面主标题组件，带有渐变色效果和动画
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <PageTitle>Welcome to My Site</PageTitle>
+ * 
+ * // 使用 title 属性
+ * <PageTitle title="Welcome" className="my-8" />
+ * ```
+ */
 export function PageTitle({ children, title, className = '' }: HeadingProps) {
   return (
     <motion.h1
@@ -23,7 +40,18 @@ export function PageTitle({ children, title, className = '' }: HeadingProps) {
   );
 }
 
-// 區塊標題：中等大小，帶漸變色
+/**
+ * 区块标题组件，用于页面主要区块的标题
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <SectionTitle>Featured Products</SectionTitle>
+ * 
+ * // 自定义样式
+ * <SectionTitle className="mb-8">Our Services</SectionTitle>
+ * ```
+ */
 export function SectionTitle({ children, title, className = '' }: HeadingProps) {
   return (
     <motion.h2
@@ -37,8 +65,22 @@ export function SectionTitle({ children, title, className = '' }: HeadingProps) 
   );
 }
 
-// 卡片標題：較小，深灰色
-export function CardTitle({ children, title,className = '' }: HeadingProps) {
+/**
+ * 卡片标题组件，用于卡片或小区块的标题
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <CardTitle>Product Features</CardTitle>
+ * 
+ * // 在卡片中使用
+ * <Card>
+ *   <CardTitle>Premium Plan</CardTitle>
+ *   <CardContent>...</CardContent>
+ * </Card>
+ * ```
+ */
+export function CardTitle({ children, title, className = '' }: HeadingProps) {
   return (
     <motion.h3
       initial={{ opacity: 0 }}
@@ -51,19 +93,35 @@ export function CardTitle({ children, title,className = '' }: HeadingProps) {
   );
 }
 
-// 區塊子標題：最小，帶圖標位置
+/**
+ * 子标题组件，用于次级内容的标题
+ * 
+ * @component
+ * @example
+ * font-semibold: font-weight: 600;
+ * text-lg: font-size: 1.125rem;
+ * ```tsx
+ * <SubTitle>Technical Details</SubTitle>
+ * 
+ * // 在列表中使用
+ * <div>
+ *   <SubTitle>Specifications</SubTitle>
+ *   <ul>...</ul>
+ * </div>
+ * ```
+ */
 export function SubTitle({ children, title, className = '' }: HeadingProps) {
   return (
     <motion.h4
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`text-lg font-semibold text-gray-800 ${className}`}
+      className={`text-lg font-semibold ${className}`}
     >
       {title || children}
     </motion.h4>
   );
-} 
+}
 
 export default {
   PageTitle,
