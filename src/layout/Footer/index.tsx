@@ -42,10 +42,11 @@ export const Footer: React.FC<FooterProps> = ({
   texts,
   className = '',
 }) => {
+  
+  // 请帮我改造下这个模块，使其在移动端内容水平居中展示
   return (
     <footer className={`relative bg-gradient-to-b from-gray-50 to-gray-100 pt-16 pb-6 ${className}`}>
       <div className="absolute inset-0 bg-grid-gray-200/25 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
-      
       <div className="container mx-auto p-4 relative">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {/* Brand Section */}
